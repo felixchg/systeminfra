@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cat > sendNotify.sh << END
+#!/bin/bash
+
+# login notify via Telegram
+BOT_TOKEN="5630906286:${myToken}"
+CHAT_ID="5717212702"
+TEXT_TO_SEND="220 fetch new SSL and deploy OK"
+
+/usr/bin/curl -4 -s -S -L -w"\n" -o- \
+    -H 'Content-Type: application/json' \
+    -d "{\"chat_id\": \"${CHAT_ID}\", \"text\": \"${TEXT_TO_SEND}\"}" \
+    -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage
+END
+
+cat > sendFile.sh << END
+#!/bin/bash
+
+# send file via Telegram
+BOT_TOKEN=""
+CHAT_ID=""
+FILE_TO_SEND="send file"
+TEXT_TO_SEND="file description"
+
+/usr/bin/curl -4 -s -S -L -w"\n" -o- \
+    -F document=@"${FILE_TO_SEND}" \
+    -F parse_mode='Markdown' \
+    -F caption="${TEXT_TO_SEND}" \
+    -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendDocument \
+    -F chat_id="${CHAT_ID}"
+END
